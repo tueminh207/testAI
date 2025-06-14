@@ -210,24 +210,150 @@
         }
 
         .message {
-            margin-bottom: 15px;
-            padding: 12px;
-            border-radius: 10px;
-            max-width: 80%;
+            margin-bottom: 20px;
+            padding: 0;
+            max-width: 85%;
             word-wrap: break-word;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .user-message {
-            background: #007bff;
-            color: white;
             margin-left: auto;
             text-align: right;
         }
 
+        .user-message .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px 20px 5px 20px;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+            display: inline-block;
+            max-width: 100%;
+        }
+
         .bot-message {
+            margin-right: auto;
+        }
+
+        .bot-message .message-content {
             background: white;
             color: #2c3e50;
-            border: 1px solid #e9ecef;
+            padding: 20px;
+            border-radius: 20px 20px 20px 5px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #28a745;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-message .message-header {
+            justify-content: flex-end;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .bot-message .message-header {
+            color: #28a745;
+        }
+
+        .message-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin: 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .user-message .message-avatar {
+            background: rgba(255, 255, 255, 0.2);
+            order: 2;
+        }
+
+        .bot-message .message-avatar {
+            background: #28a745;
+            color: white;
+        }
+
+        .message-text {
+            margin: 0;
+        }
+
+        .bot-message .message-text {
+            /* Styling for AI responses */
+        }
+
+        .bot-message .message-text p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .bot-message .message-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bot-message .message-text strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .bot-message .message-text ul, 
+        .bot-message .message-text ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .bot-message .message-text li {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+
+        .bot-message .message-text code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #e83e8c;
+        }
+
+        .bot-message .message-text blockquote {
+            border-left: 3px solid #28a745;
+            margin: 15px 0;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .user-message .message-time {
+            text-align: right;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .bot-message .message-time {
+            color: #6c757d;
         }
 
         .question-input {
@@ -284,12 +410,14 @@
 
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #007bff;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #28a745;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         @keyframes spin {
@@ -351,7 +479,17 @@
                 <h2>💬 Đặt Câu Hỏi</h2>
                 <div class="chat-container" id="chat-container">
                     <div class="message bot-message">
-                        <strong>🤖 Trợ lý AI:</strong> Xin chào! Tôi có thể giúp bạn giải đáp các thắc mắc dựa trên tài liệu đã được upload. Hãy đặt câu hỏi nhé!
+                        <div class="message-header">
+                            <div class="message-avatar">🤖</div>
+                            <span>Trợ lý AI</span>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                <p>Xin chào! Tôi có thể giúp bạn giải đáp các thắc mắc dựa trên tài liệu đã được upload.</p>
+                                <p><strong>Hãy đặt câu hỏi nhé!</strong> 📚✨</p>
+                            </div>
+                            <div class="message-time">Bây giờ</div>
+                        </div>
                     </div>
                 </div>
                 <div class="question-input">
@@ -662,9 +800,19 @@
             // Show loading
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'message bot-message';
-            loadingDiv.innerHTML = '<div class="loading"></div> Đang xử lý câu hỏi...';
+            loadingDiv.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar">🤖</div>
+                    <span>Trợ lý AI</span>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">
+                        <div class="loading"></div> Đang xử lý câu hỏi của bạn...
+                    </div>
+                </div>
+            `;
             document.getElementById('chat-container').appendChild(loadingDiv);
-            loadingDiv.scrollIntoView();
+            loadingDiv.scrollIntoView({ behavior: 'smooth' });
 
             try {
                 const answer = await getAnswerFromDeepSeek(question);
@@ -725,14 +873,77 @@ Hãy trả lời bằng tiếng Việt, ngắn gọn và dễ hiểu. Nếu khô
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
             
+            const currentTime = new Date().toLocaleTimeString('vi-VN', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
             if (sender === 'user') {
-                messageDiv.innerHTML = `<strong>👨‍🎓 Bạn:</strong> ${message}`;
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <span>Bạn</span>
+                        <div class="message-avatar">👨‍🎓</div>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${message}</div>
+                        <div class="message-time">${currentTime}</div>
+                    </div>
+                `;
             } else {
-                messageDiv.innerHTML = `<strong>🤖 Trợ lý AI:</strong> ${message}`;
+                const formattedMessage = formatAIResponse(message);
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-avatar">🤖</div>
+                        <span>Trợ lý AI</span>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${formattedMessage}</div>
+                        <div class="message-time">${currentTime}</div>
+                    </div>
+                `;
             }
             
             chatContainer.appendChild(messageDiv);
-            messageDiv.scrollIntoView();
+            messageDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Format AI response for better display
+        function formatAIResponse(text) {
+            // Convert line breaks to paragraphs
+            let formatted = text.replace(/\n\n/g, '</p><p>');
+            formatted = '<p>' + formatted + '</p>';
+            
+            // Handle bold text (**text** or __text__)
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/__(.*?)__/g, '<strong>$1</strong>');
+            
+            // Handle italic text (*text* or _text_)
+            formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            formatted = formatted.replace(/_(.*?)_/g, '<em>$1</em>');
+            
+            // Handle code blocks (`code`)
+            formatted = formatted.replace(/`(.*?)`/g, '<code>$1</code>');
+            
+            // Handle numbered lists
+            formatted = formatted.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
+            if (formatted.includes('<li>')) {
+                formatted = formatted.replace(/(<li>.*<\/li>)/s, '<ol>$1</ol>');
+            }
+            
+            // Handle bullet points
+            formatted = formatted.replace(/^[-•*]\s(.+)$/gm, '<li>$1</li>');
+            if (formatted.includes('<li>') && !formatted.includes('<ol>')) {
+                formatted = formatted.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+            }
+            
+            // Handle blockquotes (> text)
+            formatted = formatted.replace(/^>\s(.+)$/gm, '<blockquote>$1</blockquote>');
+            
+            // Clean up empty paragraphs
+            formatted = formatted.replace(/<p><\/p>/g, '');
+            formatted = formatted.replace(/<p>\s*<\/p>/g, '');
+            
+            return formatted;
         }
 
         // Show alert
